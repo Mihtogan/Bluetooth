@@ -80,12 +80,12 @@
                 android:text="@string/list_found_devices"
                 android:textColor="@color/main_text"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/button2"
+                app:layout_constraintEnd_toStartOf="@+id/butSearchDevices"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/butSearchDevices"
                 android:layout_width="100dp"
                 android:layout_height="30dp"
                 android:layout_margin="5dp"

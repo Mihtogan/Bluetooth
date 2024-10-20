@@ -3,4 +3,5 @@
     <string name="list_paired_devices">Список подключиных устройств</string>
     <string name="list_found_devices">Список найденных устройств</string>
     <string name="boot_search_devices">искать</string>
+    <string name="device_without_name">безымянное устройство</string>
 </resources>
