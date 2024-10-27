@@ -3,11 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
-    app:startDestination="@id/devicesList">
+    app:startDestination="@id/startFragment">
 
     <fragment
         android:id="@+id/devicesList"
         android:name="com.example.bluetooth.models.DevicesList"
         android:label="fragment_devices_list"
-        tools:layout="@layout/fragment_devices_list" />
+        tools:layout="@layout/fragment_devices_list" >
+        <action
+            android:id="@+id/action_devicesList_to_dataTransferFragment"
+            app:destination="@id/dataTransferFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="com.example.bluetooth.models.StartFragment"
+        android:label="fragment_start"
+        tools:layout="@layout/fragment_start" >
+        <action
+            android:id="@+id/action_startFragment_to_devicesList"
+            app:destination="@id/devicesList" />
+    </fragment>
+    <fragment
+        android:id="@+id/dataTransferFragment"
+        android:name="com.example.bluetooth.models.DataTransferFragment"
+        android:label="fragment_data_transfer"
+        tools:layout="@layout/fragment_data_transfer" >
+        <argument
+            android:name="mac"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 </navigation>

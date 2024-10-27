@@ -9,12 +9,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.bluetooth.R
 import com.example.bluetooth.dataClasses.ItemDevicesList
 import com.example.bluetooth.databinding.ItemListDevicesBinding
+import com.example.bluetooth.interfaces.onClickListenerBtDev
 
-class ItemDevicesAdapter : ListAdapter<ItemDevicesList, ItemDevicesAdapter.Holder>(Comparator()) {
-    class Holder(view: View) : RecyclerView.ViewHolder(view) {
+class ItemDevicesAdapter(private val listener: (String) -> Unit) :
+    ListAdapter<ItemDevicesList, ItemDevicesAdapter.Holder>(Comparator()) {
+
+    inner class Holder(view: View) : RecyclerView.ViewHolder(view) {
         private val viewBinding = ItemListDevicesBinding.bind(view)
 
         fun bind(item: ItemDevicesList) = with(viewBinding) {
+            root.setOnClickListener {
+                listener(item.mac)
+            }
             textDevicesName.text = item.name
             textDevicesMac.text = item.mac
         }

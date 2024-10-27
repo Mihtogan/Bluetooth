@@ -4,6 +4,9 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothGatt
+import android.bluetooth.BluetoothGattCallback
+import android.bluetooth.BluetoothProfile
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -16,21 +19,32 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bluetooth.BluetoothConnection
 import com.example.bluetooth.R
 import com.example.bluetooth.adapters.ItemDevicesAdapter
 import com.example.bluetooth.dataClasses.ItemDevicesList
 import com.example.bluetooth.databinding.FragmentDevicesListBinding
+import com.example.bluetooth.interfaces.onClickListenerBtDev
+import com.example.bluetooth.models.DevicesListDirections.ActionDevicesListToDataTransferFragment
 import com.example.bluetooth.vievModels.DevicesListViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class DevicesList : Fragment() {
     private val viewModel: DevicesListViewModel by viewModels()
     private var _binding: FragmentDevicesListBinding? = null
     private val binding get() = _binding!!
+
+    private var isReceiverRegistered = false
 
     private var bluetoothAdapter: BluetoothAdapter? = null
     private val searchDevicesList = MutableLiveData<List<BluetoothDevice>>()
@@ -94,6 +108,7 @@ class DevicesList : Fragment() {
                             )
                         })
                 }
+
                 startDiscovery()
             }
         }
@@ -102,14 +117,17 @@ class DevicesList : Fragment() {
     @SuppressLint("MissingPermission")
     override fun onDestroyView() {
         super.onDestroyView()
-        requireContext().unregisterReceiver(receiver)
+        if (isReceiverRegistered) {
+            requireContext().unregisterReceiver(receiver)
+            isReceiverRegistered = false
+        }
         bluetoothAdapter?.cancelDiscovery()
         _binding = null
     }
 
     private fun getRcViewAdapter(rcView: RecyclerView): ItemDevicesAdapter {
         rcView.layoutManager = LinearLayoutManager(context)
-        val adapter = ItemDevicesAdapter()
+        val adapter = ItemDevicesAdapter(onItemClick)
         rcView.adapter = adapter
         return adapter
     }
@@ -121,9 +139,17 @@ class DevicesList : Fragment() {
         if (bluetoothAdapter?.isDiscovering == true) {
             bluetoothAdapter!!.cancelDiscovery()
         }
-        val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-        requireContext().registerReceiver(receiver, filter)
+        if (!isReceiverRegistered) {
+            val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
+            requireContext().registerReceiver(receiver, filter)
+            isReceiverRegistered = true
+        }
 
         bluetoothAdapter?.startDiscovery()
+    }
+
+    @SuppressLint("MissingPermission")
+    private val onItemClick: (mac: String) -> Unit = { mac ->
+        findNavController().navigate(DevicesListDirections.actionDevicesListToDataTransferFragment(mac))
     }
 }

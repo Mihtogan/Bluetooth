@@ -4,4 +4,9 @@
     <string name="list_found_devices">Список найденных устройств</string>
     <string name="boot_search_devices">искать</string>
     <string name="device_without_name">безымянное устройство</string>
+    <string name="butGoFragmentDevicesList">списки устройств</string>
+    <string name="butGoFragmentRxTx">окно общения</string>
+    <string name="headerTextViewInData">входящие данные</string>
+    <string name="headerTextViewOutData">введите выходящие данные</string>
+    <string name="buttonForDataTransmit">нажмите для отправки</string>
 </resources>

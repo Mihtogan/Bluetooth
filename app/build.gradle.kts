@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("androidx.navigation.safeargs")
 }
 
 android {
@@ -49,6 +50,14 @@ dependencies {
 
     // Feature module support for Fragments
     implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
+
+
+    val coroutines_version ="1.6.0"
+
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
+
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
 
 
     implementation(libs.androidx.core.ktx)
